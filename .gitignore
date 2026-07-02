@@ -1,0 +1,7 @@
+firmware/build/
+build/
+firmware/sdkconfig.old
+sdkconfig.old
+*.pyc
+__pycache__/
+.vscode/
