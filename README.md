@@ -39,38 +39,26 @@ The goal of the project was to combine embedded programming, hardware communicat
   - Outdoor weather temperature
 - Requests server-configured location using HTTP GET requests
 
-**Modular Code Design**
-
-Project separated into reusable modules for maintainability:
-- LCD driver
-- Temperature sensor functions
-- WiFi/network handling
-- HTTP request handling
-- Server communication logic
-
 ## System Architecture
 
-```
 ESP32-C3
-│
-├── Read onboard temperature sensor
-├── Display temperature on LCD screen
-├── Request location from local server
-├── Query wttr.in weather API
-├── Receive outdoor temperature data
-└── Send collected data back to server via HTTP POST
+- Read onboard temperature sensor
+- Display temperature on LCD screen
+- Request location from local server
+- Query wttr.in weather API
+- Receive outdoor temperature data
+- Send collected data back to server via HTTP POST
 
 Local Server (Raspberry Pi / Laptop)
-│
-├── Handles GET requests for location
-└── Receives POST requests containing temperature data
-```
+- Handles GET requests for location
+- Receives POST requests containing temperature data
+
 
 ## Hardware Used
 
 - ESP32-C3 Development Board
 - LCD Display Module
-- Raspberry Pi (or laptop acting as server)
+- Raspberry Pi (server)
 - WiFi network connection
 
 ## Technologies Used
@@ -83,17 +71,6 @@ Local Server (Raspberry Pi / Laptop)
 - Embedded firmware development
 - IoT communication protocols
 - Python server scripting
-
-## Repo Structure
-
-```
-.
-├── firmware/       # ESP32-C3 source code (ESP-IDF project)
-│   ├── main/
-│   └── CMakeLists.txt
-└── server/         # Python server (runs on Raspberry Pi or laptop)
-    └── server.py
-```
 
 ## Getting Started
 
@@ -111,7 +88,7 @@ cd firmware
 idf.py set-target esp32c3
 idf.py menuconfig   # set WiFi SSID/password if configured here
 idf.py build
-idf.py -p <PORT> flash monitor
+idf.py flash monitor
 ```
 
 Update the server address/port and any location defaults in the firmware source before flashing, if these are hardcoded rather than set via `menuconfig`.
@@ -135,49 +112,16 @@ Once flashed and powered on, the ESP32 will:
 5. Query wttr.in for outdoor weather at that location
 6. POST both temperature readings back to the server
 
-## Example Workflow
-
-1. ESP32 connects to WiFi
-2. Reads onboard temperature sensor
-3. Displays temperature on LCD screen
-4. Sends GET request to local server for configured location
-5. Requests live weather data from wttr.in API
-6. Parses outdoor temperature response
-7. Sends both local and outdoor temperatures back to the server via POST request
-8. Server logs all received data
-
-## What I Learned
-
-This project gave me hands-on experience with several core embedded systems concepts:
-
-- Building modular firmware instead of writing everything in a single source file
-- Working with HTTP networking on microcontrollers
-- Integrating hardware peripherals with application logic
-- Structuring code for future reuse and maintainability
-- Debugging communication between embedded devices and external servers
-- Combining low-level embedded programming with higher-level networking concepts
-
-One improvement I made beyond the original project requirements was reorganizing the LCD and temperature sensor code into reusable modules and integrating the LCD to provide local temperature readout directly on the device.
-
-## Future Improvements
-
-- Add humidity and pressure sensors
-- Display outdoor weather data on the LCD
-- Store historical temperature data locally
-- Push data to a cloud database instead of a local server
-- Build a web dashboard for live monitoring
-
 ## Demo 
-
 
 <p align="center">
     <img src="./docs/images/weather_output.png" width="75%" />
 </p>
 
-*Serial monitor output showing a full update cycle — WiFi connect, a GET request to wttr.in for outdoor temperature, an SHTC3 sensor reading, and a POST request sending both values to the local server, with a 200 OK response confirming receipt.*
+<sub>*Serial monitor output showing a full update cycle — WiFi connect, a GET request to wttr.in for outdoor temperature, an SHTC3 sensor reading, and a POST request sending both values to the local server, with a 200 OK response confirming receipt.*</sub>
 
 <p align="center">
     <img src="./docs/images/weather_lcd.jpeg" width="75%" />
 </p>
 
-*The ESP32-C3 on a breadboard driving the LCD, showing live indoor ("In:") and outdoor ("Out:") temperature readings on the device itself.*
+<sub>*The ESP32-C3 on a breadboard driving the LCD, showing live indoor ("In:") and outdoor ("Out:") temperature readings on the device itself.*</sub>
